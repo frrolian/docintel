@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -59,11 +60,6 @@ body::after{content:'';position:fixed;top:0;left:0;right:0;bottom:0;background:r
 .section-label{font-family:var(--font);font-size:11px;font-weight:600;color:var(--gray-500);text-transform:uppercase;letter-spacing:.08em;margin-bottom:18px;display:flex;align-items:center;gap:8px}
 .section-label::after{content:'';flex:1;height:1px;background:var(--gray-200)}
 .req{color:#E24B4A;margin-left:2px}
-
-/* ── Tags ── */
-.tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
-.tag{font-family:var(--font);font-size:11px;font-weight:500;padding:3px 10px;border-radius:20px;background:var(--blue-light);color:var(--blue);border:1px solid rgba(24,95,165,.15);display:flex;align-items:center;gap:5px}
-.tag-dot{width:5px;height:5px;border-radius:50%;background:var(--blue-mid);flex-shrink:0}
 
 /* ── Drop zone ── */
 .drop-zone{border:2px dashed var(--gray-300);border-radius:var(--radius);padding:38px 24px;text-align:center;cursor:pointer;transition:all .2s;background:var(--gray-100)}
@@ -256,10 +252,8 @@ const DEMO_MODE = FLOW_URL === '';
 
 let files = [];
 
-// Department tag update
-document.getElementById('selDept').addEventListener('change', function() {
-  if (this.value) document.getElementById('tagDept').textContent = this.value;
-});
+// Department change
+document.getElementById('selDept').addEventListener('change', function() {});
 
 // Drag and drop
 const dz = document.getElementById('dropZoneInner');
@@ -394,7 +388,6 @@ function resetFields() {
   document.getElementById('inputUploaderName').value='';
   document.getElementById('inputUploaderEmail').value='';
   if(document.getElementById('selCategory')) document.getElementById('selCategory').value='All Categories';
-  document.getElementById('tagDept').textContent='Finance';
 }
 
 function resetForm() {
@@ -406,9 +399,6 @@ function resetForm() {
 
 document.getElementById('btnSubmit').addEventListener('click', handleSubmit);
 document.getElementById('btnClear').addEventListener('click', resetForm);
-
-document.getElementById('tagMonth').textContent =
-  new Date().toLocaleDateString('en-CA',{year:'numeric',month:'short'});
 </script>
 </body>
 </html>
