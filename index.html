@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -46,6 +45,7 @@ body::after{content:'';position:fixed;top:0;left:0;right:0;bottom:0;background:r
 .banner.success{background:var(--accent-light);border:1px solid rgba(29,158,117,.2);color:#0F6E56}
 .banner.error{background:var(--red-light);border:1px solid rgba(163,45,45,.2);color:var(--red)}
 @keyframes fadeIn{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeOut{from{opacity:1;transform:translateY(0)}to{opacity:0;transform:translateY(-6px)}}
 
 /* ── Progress ── */
 .progress-wrap{margin-bottom:14px;display:none}
@@ -144,10 +144,10 @@ textarea.form-control{resize:vertical;min-height:85px;line-height:1.6}
 
   <div class="banner success" id="bannerSuccess">
     <svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-    <div><strong>Uploaded successfully.</strong> Your file is being processed by Power Automate.</div>
+    <div><strong>Uploaded successfully.</strong> Your file has been received and is being processed.</div>
   </div>
   <div class="banner error" id="bannerError">
-    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><circle cx="12" cy="16" r="0.5" fill="currentColor"/></svg>
     <div id="errorMsg">Something went wrong. Please try again.</div>
   </div>
 
@@ -293,14 +293,30 @@ function renderFiles() {
   });
 }
 
+let bannerTimer = null;
+
+function hideBanner(el) {
+  el.style.animation = 'fadeOut 0.4s ease forwards';
+  setTimeout(() => { el.style.display = 'none'; el.style.animation = ''; }, 400);
+}
+
 function showBanner(type, msg) {
-  document.getElementById('bannerSuccess').style.display = 'none';
-  document.getElementById('bannerError').style.display   = 'none';
-  if (type==='success') {
-    document.getElementById('bannerSuccess').style.display = 'flex';
+  if (bannerTimer) { clearTimeout(bannerTimer); bannerTimer = null; }
+
+  const success = document.getElementById('bannerSuccess');
+  const error   = document.getElementById('bannerError');
+  success.style.display = 'none';
+  error.style.display   = 'none';
+
+  if (type === 'success') {
+    success.style.animation = 'fadeIn 0.3s ease';
+    success.style.display = 'flex';
+    bannerTimer = setTimeout(() => hideBanner(success), 4000);
   } else {
     document.getElementById('errorMsg').textContent = msg || 'Something went wrong. Please try again.';
-    document.getElementById('bannerError').style.display = 'flex';
+    error.style.animation = 'fadeIn 0.3s ease';
+    error.style.display = 'flex';
+    bannerTimer = setTimeout(() => hideBanner(error), 5000);
   }
   try { window.scrollTo({top:0,behavior:'smooth'}); } catch(e){}
 }
